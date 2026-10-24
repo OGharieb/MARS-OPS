@@ -1,3 +1,4 @@
+package enums;
 public enum EnvironmentCondition {
     NORMAL,
     DUST_STORM,
