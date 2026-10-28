@@ -20,6 +20,7 @@ public abstract  class CrewMember implements Agent {
         this.fatigueLevel=0;
 
     }
+    
 
     @Override 
     public String getId(){
@@ -63,7 +64,7 @@ public abstract  class CrewMember implements Agent {
 
 
     public abstract void performDuty();
-
+ 
 
 
 
