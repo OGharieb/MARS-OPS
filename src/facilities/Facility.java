@@ -5,11 +5,13 @@ import equipments.Equipment;
 import java.util.ArrayList;
 import java.util.List;
 import resources.Resources;
+import resources.resources2;
 
 public abstract  class Facility {
     protected boolean isOperational;
     protected FacilityType type;
     protected Resources resources;
+    protected resources2 resources2;
     protected List<Equipment> equipments;
 
     public Facility(FacilityType type, int capacity) {
@@ -21,7 +23,7 @@ public abstract  class Facility {
 
     
 
-    public boolean isIsOperational() {
+    public boolean isOperational() {
         return isOperational;
     }
 
@@ -39,6 +41,11 @@ public abstract  class Facility {
         return resources;
     }
 
+    public resources2 getResources2() {
+        return resources2;
+    }
+
+    
     
 
     
