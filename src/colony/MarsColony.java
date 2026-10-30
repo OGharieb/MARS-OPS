@@ -114,6 +114,10 @@ public class MarsColony {
 
     public void advanceDay() {
         this.currentDay++;
+        for(Mission mission: missions){
+            if(mission.getState() == MissionState.ASSIGNED || mission.getState() == MissionState.IN_PROGRESS)
+                mission.advanceTime();
+        }
         
     }
 
