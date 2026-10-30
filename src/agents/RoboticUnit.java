@@ -1,5 +1,7 @@
 package agents;
 
+import enums.AgentRole;
+
 public abstract class RoboticUnit implements Agent {
     
     protected String id;
@@ -7,14 +9,23 @@ public abstract class RoboticUnit implements Agent {
     protected boolean available;
     protected int batteryLevel;
     protected boolean functional;
+    protected AgentRole role;
 
-    public RoboticUnit(String id, String location){
+    public RoboticUnit(String id, String location,AgentRole role){
         this.id=id;
         this.location=location;
         this.batteryLevel=100;
         this.functional=true;
         this.available=true;
+        this.role=role;
     }
+
+    
+    @Override 
+    public AgentRole getRole() {
+        return role;
+    }
+
     
     @Override 
     public String getId(){

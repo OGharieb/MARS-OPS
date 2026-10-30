@@ -1,6 +1,7 @@
 package agents;
-import missions.Mission;
 import emergencies.Emergency;
+import enums.AgentRole;
+import missions.Mission;
 
 public interface Agent {
     String getId();
@@ -10,4 +11,6 @@ public interface Agent {
     void setAvailable(boolean available);
     boolean canRespond(Emergency emergency);
     boolean canPerform(Mission mission);
+    AgentRole getRole();
+    
 }

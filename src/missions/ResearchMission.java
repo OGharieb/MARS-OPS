@@ -1,5 +1,74 @@
 package missions;
 
-public class ResearchMission {
+import agents.Agent;
+import colony.MarsColony;
+import enums.AgentRole;
+import enums.EquipmentType;
+import enums.MissionType;
+import enums.ResourceType;
+import equipments.Equipment;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ResearchMission extends Mission{
+
+    public ResearchMission(String location,String requiredSkills,int duration){
+        super(location, requiredSkills, duration,MissionType.RESEARCH);
+
+
+    }
+
+    @Override
+    public boolean hasSufficientRecourses(MarsColony colony) {
+        int requiredOxygen=5;
+        int requiredBatteryPower=10;
+        return colony.getTotal(ResourceType.OXYGEN)>=requiredOxygen&&
+        colony.getTotal(ResourceType.BATTERY)>=requiredBatteryPower;
+    }
+    
+    @Override
+    public boolean hasRequiredEquipment(MarsColony colony) {
+        boolean hasEquipment=false;
+        for(Equipment eq : colony.getAllEquipment()){
+            if(eq.getType().equals(EquipmentType.RESEARCH)){
+                hasEquipment=true;
+                break;
+            }
+                
+        }
+        return hasEquipment&&colony.hasOperationalLab();
+    }
+
+    @Override
+    public boolean  assembleTeam(List<Agent> availableAgents) {
+        int requiredScientists=2;
+        int scientistCount=0;
+
+        List<Agent> assigned = new ArrayList<>();
+        for(Agent agent : availableAgents){
+            if(scientistCount<requiredScientists&&agent.canPerform(this)&&agent.getRole().equals(AgentRole.SCIENTIST) ){
+                assigned.add(agent);
+                scientistCount++;
+
+            }
+
+            if(scientistCount==requiredScientists){
+                for(Agent assignedAgent : assigned){
+                    this.assign(assignedAgent);
+                }
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    
+
+
+
+    
+
+
     
 }

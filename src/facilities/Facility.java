@@ -1,5 +1,6 @@
 package facilities;
 
+import agents.Agent;
 import enums.FacilityType;
 import equipments.Equipment;
 import java.util.ArrayList;
@@ -11,15 +12,33 @@ public abstract  class Facility {
     protected FacilityType type;
     protected Resources resources;
     protected List<Equipment> equipments;
+    protected List<Agent> agents ;
 
     public Facility(FacilityType type, int capacity) {
         this.isOperational = true;
         this.type = type;
         this.resources = new Resources();
         this.equipments = new ArrayList<>();
+        this.agents=new ArrayList<>();
+
+    }
+    
+    
+    public void addAgent(Agent agent){
+        this.agents.add(agent);
     }
 
-    
+    public void addEquipment(Equipment equipment){
+        this.equipments.add(equipment);
+    }
+
+    public List<Agent> getAgents() {
+        return agents;
+    }
+
+    public void setOperational(boolean isOperational) {
+        this.isOperational = isOperational;
+    }
 
     public boolean isOperational() {
         return isOperational;
@@ -31,7 +50,7 @@ public abstract  class Facility {
 
 
 
-    public List<Equipment> getEquipments() {
+    public List<Equipment> getEquipment() {
         return equipments;
     }
 

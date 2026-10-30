@@ -1,5 +1,6 @@
 package agents;
 
+import enums.AgentRole;
 import java.util.List;
 
 public abstract  class CrewMember implements Agent {
@@ -10,17 +11,24 @@ public abstract  class CrewMember implements Agent {
     protected List<String> skills;
     protected int fatigueLevel;
     protected int healthStatus;
+    AgentRole role;
 
-    public CrewMember(String id,String location,String name){
+    public CrewMember(String id,String location,String name,AgentRole role){
         this.id=id;
         this.name=name;
         this.location=location;
         this.available=true;
         this.healthStatus=100;
         this.fatigueLevel=0;
+        this.role= role;
+
 
     }
     
+    @Override 
+    public AgentRole getRole() {
+        return role;
+    }
 
     @Override 
     public String getId(){

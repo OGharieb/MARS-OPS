@@ -1,13 +1,19 @@
 package colony;
 
+import agents.Agent;
+import enums.FacilityType;
+import enums.MissionState;
 import enums.ResourceType;
+import equipments.Equipment;
 import facilities.Facility;
 import java.util.ArrayList;
 import java.util.List;
+import missions.Mission;
 
 public class MarsColony {
-    List<Facility> facilities;
+    List<Facility> facilities = new ArrayList<>();
     private int currentDay;
+    List<Mission> missions= new ArrayList<>();
 
     public MarsColony(){
         this.facilities= new ArrayList<>();
@@ -53,13 +59,46 @@ public class MarsColony {
         return true;
     }
 
+    public List<Equipment> getAllEquipment(){
+        List<Equipment> totalEquipment= new ArrayList<>(); 
+        
+        for(Facility facility : facilities){
+            if(facility.isOperational()){
+                totalEquipment.addAll(facility.getEquipment());
+            }
+        }
+        return totalEquipment;
+    }
+
+    public boolean hasOperationalLab(){
+        for(Facility facility : facilities){
+            if(facility.getType().equals(FacilityType.LABORATORY)&&facility.isOperational()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void submitMission(Mission mission){
+        if(!mission.hasRequiredEquipment(this)||!mission.hasRequiredEquipment(this)){
+            mission.setState(MissionState.FAILED);
+            missions.add(mission);
+            return;
+        }
+
+        for(Facility facility : facilities){
+            if(facility.isOperational()){
+                for(Agent agent: facility.g)
+            }
+        }
+    }
+
     
     //end of resources functionssss
 
-    public void advanceDay(){
+    public void advanceDay() {
         this.currentDay++;
-        //add mission advance code here l8r
-
+        
     }
 
 
