@@ -1,7 +1,7 @@
 package enums;
 public enum MissionState {
     PENDING,
-    ASSiGNED,
+    ASSIGNED,
     IN_PROGRESS,
     COMPLETED,
     FAILED

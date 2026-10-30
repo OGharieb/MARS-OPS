@@ -12,31 +12,47 @@ import java.util.List;
 
 public class ResearchMission extends Mission{
 
-    public ResearchMission(String location,String requiredSkills,int duration){
-        super(location, requiredSkills, duration,MissionType.RESEARCH);
+    int requiredOxygen=5;
+    int requiredBatteryPower=10;
 
+    public ResearchMission(String location,String requiredSkills){
+        super(location, requiredSkills,7,MissionType.RESEARCH);
 
     }
 
     @Override
     public boolean hasSufficientRecourses(MarsColony colony) {
-        int requiredOxygen=5;
-        int requiredBatteryPower=10;
         return colony.getTotal(ResourceType.OXYGEN)>=requiredOxygen&&
         colony.getTotal(ResourceType.BATTERY)>=requiredBatteryPower;
+    }
+
+    @Override 
+    public void consumeResources(MarsColony colony){
+        colony.consume(ResourceType.OXYGEN, requiredOxygen);
+        colony.consume(ResourceType.BATTERY, requiredBatteryPower);
     }
     
     @Override
     public boolean hasRequiredEquipment(MarsColony colony) {
         boolean hasEquipment=false;
         for(Equipment eq : colony.getAllEquipment()){
-            if(eq.getType().equals(EquipmentType.RESEARCH)){
+            if(eq.getType().equals(EquipmentType.RESEARCH)&&!eq.isDamaged()&&!eq.isAssigned()){
                 hasEquipment=true;
                 break;
             }
                 
         }
         return hasEquipment&&colony.hasOperationalLab();
+    }
+
+    @Override
+    public void assignEquipment(MarsColony colony) {
+        for(Equipment eq : colony.getAllEquipment()){
+            if(eq.getType().equals(EquipmentType.RESEARCH) && !eq.isDamaged() && !eq.isAssigned()){
+                eq.setAssigned(true);
+                break;
+            }
+        }
     }
 
     @Override

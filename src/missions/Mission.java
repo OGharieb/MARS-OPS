@@ -59,9 +59,9 @@ public abstract class Mission {
             this.setState(MissionState.COMPLETED);
         }
     }
-
-
-    public abstract boolean  assembleTeam(List<Agent> availabAgents);
+    public abstract void assignEquipment(MarsColony colony);
+    public abstract void consumeResources(MarsColony colony);
+    public abstract boolean  assembleTeam(List<Agent> availableAgents);
     public abstract boolean hasSufficientRecourses(MarsColony colony);
     public abstract boolean hasRequiredEquipment(MarsColony colony);
 

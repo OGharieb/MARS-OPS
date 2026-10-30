@@ -80,17 +80,33 @@ public class MarsColony {
     }
 
     public void submitMission(Mission mission){
-        if(!mission.hasRequiredEquipment(this)||!mission.hasRequiredEquipment(this)){
+        if(!mission.hasRequiredEquipment(this)||!mission.hasSufficientRecourses(this)){
             mission.setState(MissionState.FAILED);
             missions.add(mission);
             return;
         }
-
+        List<Agent> allAgents= new ArrayList<>();
         for(Facility facility : facilities){
             if(facility.isOperational()){
-                for(Agent agent: facility.g)
+                for(Agent agent: facility.getAgents()){
+                    allAgents.add(agent);
+                }
             }
         }
+        if(mission.assembleTeam(allAgents)){
+            mission.consumeResources(this);
+            mission.assignEquipment(this);
+            mission.setState(MissionState.ASSIGNED);
+            missions.add(mission);
+        }
+        else{
+            mission.setState(MissionState.FAILED);
+            missions.add(mission);
+        }
+
+
+
+
     }
 
     
