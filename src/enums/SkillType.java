@@ -7,5 +7,8 @@ public enum SkillType {
     GEOLOGY,
     FIRST_AID,
     SURGERY,
-    DRIVING
+    DRIVING,
+    EXPLORATION,
+    MEDICAL,
+    REPAIR
 }

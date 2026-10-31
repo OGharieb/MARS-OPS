@@ -3,7 +3,7 @@ import enums.FacilityType;
 
 
 public class CommunicationStation extends Facility{
-    CommunicationStation(String facilityName){
+    public CommunicationStation(String facilityName){
         super(FacilityType.COMMUNICATION_STATION, facilityName);
     }
     public void sendMessage(String message){

@@ -1,16 +1,16 @@
 package colony;
 
-import java.util.List;
-import emergencies.Emergency;
-import enums.EmergencyState;
 import agents.Agent;
-import enums.ResourceType;
-import enums.EmergencyType;
-import emergencies.OxygenLeak;
-import emergencies.RoverBreakdown;
+import emergencies.Emergency;
 import emergencies.Fire;
 import emergencies.MedicalEmergency;
+import emergencies.OxygenLeak;
+import emergencies.RoverBreakdown;
+import enums.EmergencyState;
+import enums.EmergencyType;
 import enums.MissionState;
+import enums.ResourceType;
+import java.util.List;
 
 public class EmergencyHandler {
 

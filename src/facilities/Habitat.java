@@ -3,7 +3,7 @@ package facilities;
 import enums.FacilityType;
 public class Habitat extends Facility{
     private final LifeSupportSystem lifeSupport;
-    Habitat(String facilityName){
+    public Habitat(String facilityName){
     super(FacilityType.HABITAT, facilityName);
     lifeSupport = new LifeSupportSystem(this.agents, this.resources);
     }

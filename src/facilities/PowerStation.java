@@ -1,10 +1,9 @@
 package facilities;
 import enums.FacilityType;
-import resources.Resources;
 import enums.ResourceType;
 
 public class PowerStation extends Facility {
-PowerStation(String facilityName){
+public PowerStation(String facilityName){
     super(FacilityType.POWER_STATION, facilityName);
 }
 

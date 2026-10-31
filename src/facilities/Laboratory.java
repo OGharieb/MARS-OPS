@@ -1,11 +1,11 @@
 package facilities;
 
-import enums.FacilityType;
-import enums.AgentRole;
 import agents.Agent;
+import enums.AgentRole;
+import enums.FacilityType;
 
 public class Laboratory extends Facility{
-    Laboratory(String facilityName){
+    public Laboratory(String facilityName){
         super(FacilityType.LABORATORY, facilityName);
     }
 
