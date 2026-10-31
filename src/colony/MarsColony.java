@@ -120,6 +120,8 @@ public class MarsColony {
         if(!mission.hasRequiredEquipment(this)||!mission.hasSufficientRecourses(this)){
             mission.setState(MissionState.FAILED);
             missions.add(mission);
+            System.out.println("mission failed couldn't assemble team ");
+
             return;
         }
         List<Agent> allAgents= getAllAgents();
@@ -128,16 +130,19 @@ public class MarsColony {
             mission.assignEquipment(this);
             mission.setState(MissionState.ASSIGNED);
             missions.add(mission);
+            System.out.println("mission assigned team has been assembled ");
+
         }
         else{
             mission.setState(MissionState.FAILED);
+            System.out.println("mission failed couldn't assemble team ");
             missions.add(mission);
         }
-
-
-
-
     }
+    public void addEmergency(Emergency emergency){
+        emergencies.add(emergency);
+    }
+    
 
     public void advanceDay() {
         this.currentDay++;
