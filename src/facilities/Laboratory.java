@@ -18,5 +18,15 @@ public class Laboratory extends Facility{
         }
         return count;
     }
+    public void repairAllEquipments(){
+        for(int i=0;i<equipments.size();i++){
+            equipments.get(i).repairEquipment();
+        }
+    }
+    public void damageAllEquipments(){
+        for(int i=0;i<equipments.size();i++){
+            equipments.get(i).damageEquipment();
+        }
+    }
 }
 

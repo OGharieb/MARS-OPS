@@ -67,6 +67,15 @@ public abstract  class Facility {
      public void medicalEmergencyOccurs(){
         this.agents.get(0).setAvailable(false);
      }
+    public void looseOxygen(int amount){
+        boolean success = this.resources.consumeAmount(enums.ResourceType.OXYGEN, amount);
+        if (!success){
+            this.resources.consumeAll(enums.ResourceType.OXYGEN);
+        }
+        if (this.resources.isEmpty(enums.ResourceType.OXYGEN)){
+        System.out.println("Warning: " + this.facilityName + " has no oxygen left!!!!!!");
+        }
+    }
 
     
     

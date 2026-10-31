@@ -38,6 +38,12 @@ public class Equipment {
     public void setAssigned(boolean assigned) {
         this.assigned = assigned;
     }
+    public void damageEquipment() {
+        this.isDamaged = true;
+    }
+    public void repairEquipment() {
+        this.isDamaged = false;
+    }
     
     
     

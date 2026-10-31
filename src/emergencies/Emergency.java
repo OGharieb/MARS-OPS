@@ -16,6 +16,8 @@ public abstract class Emergency {
     void setLocationToMartianSurface() {
         this.location = "Martian Surface";
     }
-    abstract void resolveEmergency();
+     void resolveEmergency(){
+        this.state = EmergencyState.RESOLVED;
+     }
     abstract void happen();
 }
