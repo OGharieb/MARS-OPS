@@ -8,5 +8,4 @@ public enum SkillType {
     FIRST_AID,
     SURGERY,
     DRIVING
-
 }
