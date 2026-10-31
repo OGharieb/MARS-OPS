@@ -64,8 +64,12 @@ public abstract  class Facility {
         return resources;
     }
 
-     public void medicalEmergencyOccurs(){
-        this.agents.get(0).setAvailable(false);
+     public void medicalEmergencyOccurs(int agentNumber){
+        if (agentNumber < 0 || agentNumber >= this.agents.size()) {
+            System.out.println("Invalid agent number.");
+            return;
+        }
+        this.agents.get(agentNumber).setAvailable(false);
      }
     public void looseOxygen(int amount){
         boolean success = this.resources.consumeAmount(enums.ResourceType.OXYGEN, amount);

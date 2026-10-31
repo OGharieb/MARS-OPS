@@ -6,6 +6,7 @@ import enums.AgentRole;
 import enums.EquipmentType;
 import enums.MissionType;
 import enums.ResourceType;
+import enums.SkillType;
 import equipments.Equipment;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,8 @@ public class RescueMission extends Mission {
     int requiredFood=2;
     int requiredMedical =2;
 
-    public RescueMission(String location,String requiredSkills){
-        super(location, requiredSkills,1,MissionType.RESCUE);
+    public RescueMission(String location,SkillType requiredSkill){
+        super(location, requiredSkill,1,MissionType.RESCUE);
 
     }
 
@@ -58,8 +59,8 @@ public class RescueMission extends Mission {
     public boolean  assembleTeam(List<Agent> availableAgents) {
         int requiredMedics=1;
         int medicCount=0;
-        int requiredDrones=1;
-        int droneCount=0;
+        int requiredRovers = 1;
+        int roverCount = 0;
 
         List<Agent> assigned = new ArrayList<>();
         for(Agent agent : availableAgents){
@@ -68,13 +69,12 @@ public class RescueMission extends Mission {
                 medicCount++;
 
             }
-            if(droneCount<requiredDrones&&agent.canPerform(this)&&agent.getRole().equals(AgentRole.DRONE)){
+            if(roverCount < requiredRovers && agent.canPerform(this) && agent.getRole().equals(AgentRole.EXPLORATION_ROVER)){
                 assigned.add(agent);
-                droneCount++;
-
+                roverCount++;
             }
 
-            if(medicCount==requiredMedics&&droneCount==requiredDrones){
+            if(medicCount==requiredMedics&&roverCount == requiredRovers){
                 for(Agent assignedAgent : assigned){
                     this.assign(assignedAgent);
                 }

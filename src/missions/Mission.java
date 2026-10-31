@@ -4,21 +4,22 @@ import agents.Agent;
 import colony.MarsColony;
 import enums.MissionState;
 import enums.MissionType;
+import enums.SkillType;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Mission {
    protected String location;
-   protected String requiredSkills;
+   protected SkillType requiredSkill;
    protected MissionType missionType;
    protected int elapsedTime=0;
    protected int duration;
    protected MissionState state;
    protected List<Agent> assignedAgents;
 
-    public Mission(String location,String requiredSkills,int duration,MissionType missionType) {
+    public Mission(String location,SkillType requiredSkill,int duration,MissionType missionType) {
         this.location=location;
-        this.requiredSkills=requiredSkills;
+        this.requiredSkill=requiredSkill;
         this.duration=duration;
         this.elapsedTime=0;
         this.state= MissionState.PENDING;
@@ -40,8 +41,8 @@ public abstract class Mission {
    }
     
 
-    public String getRequiredSkills(){
-        return this.requiredSkills;
+    public SkillType getRequiredSkill(){
+        return this.requiredSkill;
     }
     public MissionState getState(){
         return this.state;

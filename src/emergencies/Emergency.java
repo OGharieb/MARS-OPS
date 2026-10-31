@@ -20,4 +20,25 @@ public abstract class Emergency {
         this.state = EmergencyState.RESOLVED;
      }
     abstract void happen();
+
+
+        public EmergencyType getType() {
+        return type;
+    }
+
+    public boolean isResolved() {
+        if (this.state == EmergencyState.RESOLVED){
+            return true;
+        }
+        return false;
+    }
+
+    public void setResolved(boolean resolved) {
+        if (resolved){
+            this.state = EmergencyState.RESOLVED;
+        } else {
+            this.state = EmergencyState.UNRESOLVED;
+        }
+    }
+    
 }
