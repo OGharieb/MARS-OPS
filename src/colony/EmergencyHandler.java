@@ -16,9 +16,6 @@ import facilities.Facility;
 public class EmergencyHandler {
     private List<Facility> facilities;
 
-    private List<Facility> getFacilities(MarsColony colony){
-        return colony.getFacilities();
-    }
 
     public boolean handleEmergencies(MarsColony colony){
         List<Agent> allAgents = colony.getAllAgents();
