@@ -145,6 +145,7 @@ public class MarsColony {
             if(mission.getState() == MissionState.ASSIGNED || mission.getState() == MissionState.IN_PROGRESS)
                 mission.advanceTime();
         }
+        emergencyHandler.handleEmergencies(this);
         
     }
 
