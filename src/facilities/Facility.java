@@ -14,7 +14,7 @@ public abstract  class Facility {
     protected List<Equipment> equipments;
     protected List<Agent> agents ;
 
-    public Facility(FacilityType type, int capacity) {
+    public Facility(FacilityType type) {
         this.isOperational = true;
         this.type = type;
         this.resources = new Resources();
@@ -59,6 +59,10 @@ public abstract  class Facility {
     public Resources getResources() {
         return resources;
     }
+
+     public void medicalEmergencyOccurs(){
+        this.agents.get(0).setAvailable(false);
+     }
 
     
     
