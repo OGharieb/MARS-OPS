@@ -49,7 +49,12 @@ public abstract class Mission {
     }
 
     public void setState(MissionState state){
-         this.state = state;
+        this.state = state;
+        if(state == MissionState.COMPLETED || state == MissionState.FAILED){
+            for(Agent agent : assignedAgents){
+                agent.setAvailable(true);
+            }
+        }
     }
 
     public void advanceTime(){
