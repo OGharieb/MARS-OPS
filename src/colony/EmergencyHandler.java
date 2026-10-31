@@ -7,6 +7,7 @@ import agents.Agent;
 import enums.ResourceType;
 import enums.EmergencyType;
 import emergencies.OxygenLeak;
+import emergencies.RoverBreakdown;
 import emergencies.Fire;
 
 public class EmergencyHandler {
@@ -24,6 +25,11 @@ public class EmergencyHandler {
                     Fire fire = (Fire) emergency;
                     handleFire(colony,fire,allAgents);
                 }
+                if (emergency.type == EmergencyType.ROVER_BREAKDOWN){
+                    RoverBreakdown roverBreakdown = (RoverBreakdown) emergency;
+                    handleRoverBreakdown(colony,roverBreakdown,allAgents)
+                }
+
 
                 return true;
             }
@@ -93,6 +99,36 @@ public class EmergencyHandler {
         }
         else{
             System.out.println("agent unavailable");
+            return false;
+        }
+
+    }
+    private boolean handleRoverBreakdown(MarsColony colony, RoverBreakdown emergency,List<Agent> allAgents){
+        boolean agentAvailable = false;
+        boolean sparePartsAvailable = false;
+        for (Agent agent: allAgents){
+            if (agent.canRespond(emergency) && agent.isAvailable()){
+                agent.setLocation(emergency.location);
+                agentAvailable=true;
+                break;
+            }
+        }
+        if (colony.getTotal(enums.ResourceType.SPARE_PARTS)>0){
+            sparePartsAvailable=true;
+        }
+        
+        if (!agentAvailable){
+            System.out.println("No available agent to respond to the emergency.");
+        }
+        if (!sparePartsAvailable){
+            System.out.println("No spare parts available to resolve the emergency.");
+        }
+        if (agentAvailable&&sparePartsAvailable){
+            emergency.resolveEmergency();
+            emergency.rover.setAvailable(true);
+            return true;
+        }
+        else{
             return false;
         }
 
