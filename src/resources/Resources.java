@@ -35,5 +35,11 @@ public class Resources{
 
         
     }
+    public void consumeAll(ResourceType type){
+        this.quantities.put(type, 0);
+    }
+    public boolean isEmpty(ResourceType type){
+        return this.quantities.get(type)==0;
+    }
 
 }

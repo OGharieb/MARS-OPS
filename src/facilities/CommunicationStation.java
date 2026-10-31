@@ -3,8 +3,8 @@ import enums.FacilityType;
 
 
 public class CommunicationStation extends Facility{
-    CommunicationStation(){
-        super(FacilityType.COMMUNICATION_STATION);
+    CommunicationStation(String facilityName){
+        super(FacilityType.COMMUNICATION_STATION, facilityName);
     }
     public void sendMessage(String message){
         System.out.println("Message sent: " + message);

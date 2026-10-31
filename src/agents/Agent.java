@@ -12,5 +12,8 @@ public interface Agent {
     boolean canRespond(Emergency emergency);
     boolean canPerform(Mission mission);
     AgentRole getRole();
-    
+    default void setLocationToMartianSurface() {
+        setLocation("Martian Surface");
+    }
+
 }

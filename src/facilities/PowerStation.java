@@ -4,8 +4,8 @@ import resources.Resources;
 import enums.ResourceType;
 
 public class PowerStation extends Facility {
-PowerStation(){
-    super(FacilityType.POWER_STATION);
+PowerStation(String facilityName){
+    super(FacilityType.POWER_STATION, facilityName);
 }
 
 public void generatePower(int fuelAmount){

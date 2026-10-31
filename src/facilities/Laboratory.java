@@ -5,8 +5,8 @@ import enums.AgentRole;
 import agents.Agent;
 
 public class Laboratory extends Facility{
-    Laboratory(){
-        super(FacilityType.LABORATORY);
+    Laboratory(String facilityName){
+        super(FacilityType.LABORATORY, facilityName);
     }
 
     public int hasScientists(){

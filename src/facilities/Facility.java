@@ -13,18 +13,22 @@ public abstract  class Facility {
     protected Resources resources;
     protected List<Equipment> equipments;
     protected List<Agent> agents ;
+    public String facilityName;
 
-    public Facility(FacilityType type) {
+    public Facility(FacilityType type, String facilityName) {
         this.isOperational = true;
         this.type = type;
+        this.facilityName = facilityName;
         this.resources = new Resources();
         this.equipments = new ArrayList<>();
         this.agents=new ArrayList<>();
+
 
     }
     
     
     public void addAgent(Agent agent){
+        agent.setLocation(this.facilityName);
         this.agents.add(agent);
     }
 
