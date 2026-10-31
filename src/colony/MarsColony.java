@@ -14,6 +14,7 @@ public class MarsColony {
     List<Facility> facilities = new ArrayList<>();
     private int currentDay;
     List<Mission> missions= new ArrayList<>();
+    public static String martianSurface = "Martian Surface";
 
     public MarsColony(){
         this.facilities= new ArrayList<>();

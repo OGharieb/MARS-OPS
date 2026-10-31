@@ -1,5 +1,6 @@
 package emergencies;
 import enums.EmergencyType;
+import colony.MarsColony;
 import enums.EmergencyState;
 
 public abstract class Emergency {
@@ -14,7 +15,7 @@ public abstract class Emergency {
         this.location = location;
     }
     void setLocationToMartianSurface() {
-        this.location = "Martian Surface";
+        this.location = MarsColony.martianSurface;
     }
      void resolveEmergency(){
         this.state = EmergencyState.RESOLVED;

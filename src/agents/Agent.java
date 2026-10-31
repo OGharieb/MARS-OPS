@@ -2,7 +2,7 @@ package agents;
 import emergencies.Emergency;
 import enums.AgentRole;
 import missions.Mission;
-
+import colony.MarsColony;
 public interface Agent {
     String getId();
     String getLocation();
@@ -13,7 +13,7 @@ public interface Agent {
     boolean canPerform(Mission mission);
     AgentRole getRole();
     default void setLocationToMartianSurface() {
-        setLocation("Martian Surface");
+        setLocation(MarsColony.martianSurface);
     }
 
 }
