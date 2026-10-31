@@ -65,6 +65,7 @@ public class EmergencyHandler {
             emergency.affectedHabitat.looseOxygen(emergency.oxygenLeakAmount);
 
             emergency.resolveEmergency();
+            emergency.affectedHabitat.setOperational(true);
             return true;
         }
         else{

@@ -18,6 +18,7 @@ public class OxygenLeak extends Emergency {
         hasLeaked = true;
         
         System.out.println("Oxygen is leaking at " + location + "!!!!");
+        affectedHabitat.setOperational(false);
     }
 }
 

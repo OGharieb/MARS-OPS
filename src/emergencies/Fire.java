@@ -17,6 +17,8 @@ public class Fire extends Emergency {
         System.out.println("Fire has broken out at " + location + "!!!!");
         affectedLaboratory.damageAllEquipments();
         affectedLaboratory.looseOxygen(5);
+        affectedLaboratory.setOperational(false);
+
     }
     
 }
