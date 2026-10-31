@@ -60,6 +60,8 @@ public class ResearchMission extends Mission{
     public boolean  assembleTeam(List<Agent> availableAgents) {
         int requiredScientists=2;
         int scientistCount=0;
+        int requiredDrones = 1;
+        int droneCount = 0;
 
         List<Agent> assigned = new ArrayList<>();
         for(Agent agent : availableAgents){
@@ -68,8 +70,12 @@ public class ResearchMission extends Mission{
                 scientistCount++;
 
             }
+            if(droneCount < requiredDrones && agent.canPerform(this) && agent.getRole().equals(AgentRole.DRONE) ){
+                assigned.add(agent);
+                droneCount++;
+            }
 
-            if(scientistCount==requiredScientists){
+            if(scientistCount == requiredScientists && droneCount == requiredDrones){
                 for(Agent assignedAgent : assigned){
                     this.assign(assignedAgent);
                 }

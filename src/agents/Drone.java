@@ -16,8 +16,7 @@ public class Drone extends RoboticUnit {
     @Override
     public boolean canPerform(Mission mission) {
         return isAvailable()&&
-         (mission.getMissionType()==MissionType.RESEARCH||
-         mission.getMissionType()==MissionType.EXPLORATION);
+         mission.getMissionType()==MissionType.RESEARCH;
     }
 
     @Override

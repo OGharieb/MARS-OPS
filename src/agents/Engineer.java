@@ -18,7 +18,7 @@ public class Engineer extends CrewMember {
     public boolean canPerform(Mission mission) {
         return isAvailable()&&
          skills.contains(mission.getRequiredSkill())&&
-         (mission.getMissionType()==MissionType.REPAIR||mission.getMissionType()==MissionType.EXPLORATION);
+         mission.getMissionType()==MissionType.REPAIR;
     }
 
     @Override
