@@ -1,15 +1,17 @@
 package colony;
 
 import agents.Agent;
+import emergencies.Emergency;
+import enums.EnvironmentCondition;
 import enums.FacilityType;
 import enums.MissionState;
+import enums.MissionType;
 import enums.ResourceType;
 import equipments.Equipment;
 import facilities.Facility;
 import java.util.ArrayList;
 import java.util.List;
 import missions.Mission;
-import emergencies.Emergency;
 
 public class MarsColony {
     List<Facility> facilities = new ArrayList<>();
@@ -18,11 +20,32 @@ public class MarsColony {
     public static String martianSurface = "Martian Surface";
     private EmergencyHandler emergencyHandler = new EmergencyHandler();
     public List<Emergency> emergencies = new ArrayList<>();
+    private EnvironmentCondition environment = EnvironmentCondition.NORMAL;
 
     public MarsColony(){
         this.facilities= new ArrayList<>();
         this.currentDay=1;
     }
+
+    public void setEnvironment(EnvironmentCondition environment){
+        this.environment = environment;
+        System.out.println("Environment changed to: " + environment);
+        if(environment == EnvironmentCondition.DUST_STORM){
+            for(Mission m : missions){
+                if((m.getState() == MissionState.ASSIGNED || m.getState() == MissionState.IN_PROGRESS)
+                        && m.getMissionType() == MissionType.EXPLORATION){
+                    m.setState(MissionState.FAILED);
+                    System.out.println("Active Exploration Mission failed due to dust storm.");
+                }
+            }
+        }
+    }
+
+    public EnvironmentCondition getEnvironment() {
+        return environment;
+    }
+
+    
 
     public List<Facility> getFacilities() {
         return facilities;
@@ -127,6 +150,15 @@ public class MarsColony {
 
     public int getCurrentDay() {
         return currentDay;
+    }
+
+    public void printStatusReport(){
+        System.out.println("=== Colony Status Report (Day " + currentDay + ") ===");
+        System.out.println("Environment: " + environment);
+        for(ResourceType type : ResourceType.values()){
+            System.out.println(type + ": " + getTotal(type));
+        }
+        System.out.println("==========================================");
     }
 
 
