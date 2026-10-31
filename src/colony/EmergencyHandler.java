@@ -7,6 +7,8 @@ import agents.Agent;
 import enums.ResourceType;
 import enums.EmergencyType;
 import emergencies.OxygenLeak;
+import emergencies.Fire;
+
 public class EmergencyHandler {
 
     public boolean handleEmergencies(MarsColony colony){
@@ -18,8 +20,6 @@ public class EmergencyHandler {
                     OxygenLeak oxygenLeak = (OxygenLeak) emergency;
                     handleOxygenLeak(colony,oxygenLeak,allAgents);
                 }
-
-
 
                 return true;
             }
@@ -73,6 +73,17 @@ public class EmergencyHandler {
 
     }
 
+    private boolean handleFire(MarsColony colony, Fire emergency,List<Agent> allAgents){
+        boolean agentAvailable = false;
+        for (Agent agent: allAgents){
+            if (agent.canRespond(emergency) && agent.isAvailable()){
+                agent.setLocation(emergency.location);
+                agentAvailable=true;
+                break;
+            }
+        }
+        
+    }
 
 }
 
