@@ -1,14 +1,11 @@
 package colony;
 
-import java.util.ArrayList;
 import java.util.List;
-import colony.MarsColony;
-import facilities.Facility;
 import emergencies.Emergency;
 import enums.EmergencyState;
-import emergencies.Emergency;
 import agents.Agent;
 import enums.ResourceType;
+import enums.EmergencyType;
 import emergencies.OxygenLeak;
 public class EmergencyHandler {
 
