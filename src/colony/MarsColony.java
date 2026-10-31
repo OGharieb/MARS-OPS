@@ -119,6 +119,14 @@ public class MarsColony {
         
     }
 
+    public int getCurrentDay() {
+        return currentDay;
+    }
+
+
+
+    
+
 
 
     }

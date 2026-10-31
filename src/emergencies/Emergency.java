@@ -1,7 +1,7 @@
 package emergencies;
-import enums.EmergencyType;
 import colony.MarsColony;
 import enums.EmergencyState;
+import enums.EmergencyType;
 
 public abstract class Emergency {
     public EmergencyType type;
@@ -21,17 +21,14 @@ public abstract class Emergency {
         this.state = EmergencyState.RESOLVED;
      }
     abstract void happen();
-
-
-        public EmergencyType getType() {
+    
+    public EmergencyType getType() {
         return type;
     }
 
     public boolean isResolved() {
-        if (this.state == EmergencyState.RESOLVED){
-            return true;
-        }
-        return false;
+        return this.state == EmergencyState.RESOLVED;
+        
     }
 
     public void setResolved(boolean resolved) {
