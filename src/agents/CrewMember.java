@@ -1,6 +1,7 @@
 package agents;
 
 import enums.AgentRole;
+import enums.SkillType;
 import java.util.List;
 
 public abstract  class CrewMember implements Agent {
@@ -8,21 +9,18 @@ public abstract  class CrewMember implements Agent {
     protected String name;
     protected String location;
     protected boolean available;
-    protected List<String> skills;
-    protected int fatigueLevel;
+    protected List<SkillType> skills;
     protected int healthStatus;
     AgentRole role;
 
-    public CrewMember(String id,String location,String name,AgentRole role){
+    public CrewMember(String id,String location,String name,AgentRole role,List<SkillType> skills){
         this.id=id;
         this.name=name;
         this.location=location;
         this.available=true;
         this.healthStatus=100;
-        this.fatigueLevel=0;
         this.role= role;
-
-
+        this.skills=skills;
     }
     
     @Override 
@@ -59,19 +57,7 @@ public abstract  class CrewMember implements Agent {
     public void setHealthStatus(int healthStatus){
         this.healthStatus=Math.max(0, Math.min(100,healthStatus));
     }
-    public int getFatigueLevel(){
-        return this.fatigueLevel;
-    }
-    public void incrementFatigue(int value){
-        this.fatigueLevel=Math.min(100,this.fatigueLevel+value); 
-    }
-    public void rest(){
-        this.fatigueLevel=0;
-    }
-
-
-
-    public abstract void performDuty();
+    
  
 
 

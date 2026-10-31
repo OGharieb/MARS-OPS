@@ -109,9 +109,6 @@ public class MarsColony {
 
     }
 
-    
-    //end of resources functionssss
-
     public void advanceDay() {
         this.currentDay++;
         for(Mission mission: missions){

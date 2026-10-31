@@ -68,5 +68,5 @@ public abstract class RoboticUnit implements Agent {
     }
 
 
-    public abstract void performDuty();
+    
 }

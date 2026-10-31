@@ -6,6 +6,7 @@ import enums.AgentRole;
 import enums.EquipmentType;
 import enums.MissionType;
 import enums.ResourceType;
+import enums.SkillType;
 import equipments.Equipment;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.List;
 public class ExplorationMission extends Mission {
     int requiredBatteries=20;
     
-    public ExplorationMission(String location,String requiredSkills){
-        super(location, requiredSkills,4,MissionType.EXPLORATION);
+    public ExplorationMission(String location,SkillType requiredSkill){
+        super(location, requiredSkill,4,MissionType.EXPLORATION);
 
     }
 

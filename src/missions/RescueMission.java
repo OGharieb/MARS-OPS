@@ -6,6 +6,7 @@ import enums.AgentRole;
 import enums.EquipmentType;
 import enums.MissionType;
 import enums.ResourceType;
+import enums.SkillType;
 import equipments.Equipment;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,8 @@ public class RescueMission extends Mission {
     int requiredFood=2;
     int requiredMedical =2;
 
-    public RescueMission(String location,String requiredSkills){
-        super(location, requiredSkills,1,MissionType.RESCUE);
+    public RescueMission(String location,SkillType requiredSkill){
+        super(location, requiredSkill,1,MissionType.RESCUE);
 
     }
 
