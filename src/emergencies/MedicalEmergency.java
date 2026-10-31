@@ -1,8 +1,8 @@
 package emergencies;
-import agents.Agent;
+import agents.CrewMember;
 public class  MedicalEmergency extends Emergency {
-    private final Agent agent;
-    public MedicalEmergency(Agent agent) {
+    public final CrewMember agent;
+    public MedicalEmergency(CrewMember agent) {
         super(enums.EmergencyType.MEDICAL_EMERGENCY);
         this.agent = agent;
         this.location = agent.getLocation();

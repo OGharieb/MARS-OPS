@@ -1,6 +1,7 @@
 package missions;
 
 import agents.Agent;
+import agents.ExplorationRover;
 import colony.MarsColony;
 import enums.AgentRole;
 import enums.EquipmentType;
@@ -13,7 +14,6 @@ import java.util.List;
 
 public class ExplorationMission extends Mission {
     int requiredBatteries=20;
-    
     public ExplorationMission(String location,SkillType requiredSkill){
         super(location, requiredSkill,4,MissionType.EXPLORATION);
 
@@ -71,7 +71,10 @@ public class ExplorationMission extends Mission {
             }
             if(roverCount<requiredRover&&agent.canPerform(this)&&agent.getRole().equals(AgentRole.EXPLORATION_ROVER)){
                 assigned.add(agent);
+                ExplorationRover rover = (ExplorationRover) agent;
+                rover.assignExplorationMission(this);
                 roverCount++;
+                
 
             }
 

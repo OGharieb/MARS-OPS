@@ -9,6 +9,8 @@ import enums.EmergencyType;
 import emergencies.OxygenLeak;
 import emergencies.RoverBreakdown;
 import emergencies.Fire;
+import emergencies.MedicalEmergency;
+import enums.MissionState;
 
 public class EmergencyHandler {
 
@@ -21,14 +23,20 @@ public class EmergencyHandler {
                     OxygenLeak oxygenLeak = (OxygenLeak) emergency;
                     handleOxygenLeak(colony,oxygenLeak,allAgents);
                 }
-                if (emergency.type == EmergencyType.FIRE){
+                else if (emergency.type == EmergencyType.FIRE){
                     Fire fire = (Fire) emergency;
                     handleFire(colony,fire,allAgents);
                 }
-                if (emergency.type == EmergencyType.ROVER_BREAKDOWN){
+                else if (emergency.type == EmergencyType.ROVER_BREAKDOWN){
                     RoverBreakdown roverBreakdown = (RoverBreakdown) emergency;
-                    handleRoverBreakdown(colony,roverBreakdown,allAgents)
+                    roverBreakdown.rover.assignedMission.setState(MissionState.FAILED);
+                    handleRoverBreakdown(colony,roverBreakdown,allAgents);
                 }
+                else if (emergency.type == EmergencyType.MEDICAL_EMERGENCY){
+                    MedicalEmergency medicalEmergency = (MedicalEmergency) emergency;
+                    handleMedicalEmergency(colony,medicalEmergency,allAgents);
+                }
+                
 
 
                 return true;
@@ -126,12 +134,46 @@ public class EmergencyHandler {
         if (agentAvailable&&sparePartsAvailable){
             emergency.resolveEmergency();
             emergency.rover.setAvailable(true);
+            colony.consume(ResourceType.SPARE_PARTS,1);
+
             return true;
         }
         else{
             return false;
         }
 
+    }
+
+    private boolean handleMedicalEmergency(MarsColony colony, MedicalEmergency emergency,List<Agent> allAgents){
+        boolean agentAvailable = false;
+        boolean suppliesAvaliable = false;
+        for (Agent agent: allAgents){
+            if (agent.canRespond(emergency) && agent.isAvailable()){
+                agent.setLocation(emergency.location);
+                agentAvailable=true;
+                break;
+            }
+        }
+        if (colony.getTotal(enums.ResourceType.MEDICAL_SUPPLIES)>0){
+            suppliesAvaliable=true;
+        }
+        
+        if (!agentAvailable){
+            System.out.println("No available agent to respond to the emergency.");
+        }
+        if (!suppliesAvaliable){
+            System.out.println("No medical supplies.");
+        }
+        if (agentAvailable&&suppliesAvaliable){
+            emergency.resolveEmergency();
+            emergency.agent.setAvailable(true);
+            colony.consume(ResourceType.MEDICAL_SUPPLIES,1);
+
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 }

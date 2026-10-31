@@ -4,8 +4,15 @@ import emergencies.Emergency;
 import enums.AgentRole;
 import enums.MissionType;
 import missions.Mission;
+import missions.ExplorationMission;
 
 public class ExplorationRover extends RoboticUnit{
+    public ExplorationMission assignedMission;
+
+    public void assignExplorationMission(ExplorationMission mission){
+        assignedMission = mission;
+
+    }
 
     public ExplorationRover(String id,String location) {
         super(id, location, AgentRole.EXPLORATION_ROVER);
