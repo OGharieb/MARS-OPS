@@ -48,6 +48,14 @@ public abstract  class CrewMember implements Agent {
     public void setAvailable(boolean available){
         this.available=available;
     }
+    @Override 
+    public boolean isRobot(){
+        return false;
+    }
+    @Override 
+    public boolean isHuman(){
+        return true;
+    }
     public String getName(){
         return this.name;
     }

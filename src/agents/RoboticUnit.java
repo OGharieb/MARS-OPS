@@ -47,7 +47,14 @@ public abstract class RoboticUnit implements Agent {
     public void setAvailable(boolean available){
         this.available=available;
     }
-
+    @Override 
+    public boolean isRobot(){
+        return true;
+    }
+    @Override 
+    public boolean isHuman(){
+        return false;
+    }
     public void repair(){
         this.functional=true;
     }

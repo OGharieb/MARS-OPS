@@ -9,11 +9,12 @@ public interface Agent {
     void setLocation(String location);
     boolean isAvailable();
     void setAvailable(boolean available);
-    boolean canRespond(Emergency emergency);
+    public boolean canRespond(Emergency emergency);
     boolean canPerform(Mission mission);
     AgentRole getRole();
     default void setLocationToMartianSurface() {
         setLocation(MarsColony.martianSurface);
     }
-
+    abstract public boolean isRobot();
+    abstract public boolean isHuman();
 }

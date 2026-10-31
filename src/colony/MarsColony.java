@@ -9,12 +9,15 @@ import facilities.Facility;
 import java.util.ArrayList;
 import java.util.List;
 import missions.Mission;
+import emergencies.Emergency;
 
 public class MarsColony {
     List<Facility> facilities = new ArrayList<>();
     private int currentDay;
     List<Mission> missions= new ArrayList<>();
     public static String martianSurface = "Martian Surface";
+    private EmergencyHandler emergencyHandler = new EmergencyHandler();
+    public List<Emergency> emergencies = new ArrayList<>();
 
     public MarsColony(){
         this.facilities= new ArrayList<>();
@@ -70,6 +73,16 @@ public class MarsColony {
         }
         return totalEquipment;
     }
+    public List<Agent> getAllAgents(){
+        List<Agent> totalAgents= new ArrayList<>(); 
+        
+        for(Facility facility : facilities){
+            if(facility.isOperational()){
+                totalAgents.addAll(facility.getAgents());
+            }
+        }
+        return totalAgents;
+    }
 
     public boolean hasOperationalLab(){
         for(Facility facility : facilities){
@@ -86,14 +99,7 @@ public class MarsColony {
             missions.add(mission);
             return;
         }
-        List<Agent> allAgents= new ArrayList<>();
-        for(Facility facility : facilities){
-            if(facility.isOperational()){
-                for(Agent agent: facility.getAgents()){
-                    allAgents.add(agent);
-                }
-            }
-        }
+        List<Agent> allAgents= getAllAgents();
         if(mission.assembleTeam(allAgents)){
             mission.consumeResources(this);
             mission.assignEquipment(this);
@@ -122,11 +128,6 @@ public class MarsColony {
     public int getCurrentDay() {
         return currentDay;
     }
-
-
-
-    
-
 
 
     }

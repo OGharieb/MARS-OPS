@@ -17,11 +17,12 @@ public abstract class Emergency {
     void setLocationToMartianSurface() {
         this.location = MarsColony.martianSurface;
     }
-     void resolveEmergency(){
+     public void resolveEmergency(){
         this.state = EmergencyState.RESOLVED;
      }
-    abstract void happen();
-    
+    abstract public void happen();
+
+
     public EmergencyType getType() {
         return type;
     }

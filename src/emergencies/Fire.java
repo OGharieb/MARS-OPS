@@ -5,7 +5,6 @@ import facilities.Laboratory;
 
 public class Fire extends Emergency {
     public final Laboratory affectedLaboratory;
-    public final String location;
 
     Fire(Laboratory affectedLaboratory) {
         super(EmergencyType.FIRE);
