@@ -11,11 +11,19 @@ import enums.EmergencyType;
 import enums.MissionState;
 import enums.ResourceType;
 import java.util.List;
+import facilities.Facility;
 
 public class EmergencyHandler {
+    private List<Facility> facilities;
+
+    private List<Facility> getFacilities(MarsColony colony){
+        return colony.getFacilities();
+    }
 
     public boolean handleEmergencies(MarsColony colony){
         List<Agent> allAgents = colony.getAllAgents();
+        this.facilities = colony.getFacilities();
+
         for (Emergency emergency: colony.emergencies){
             if (emergency.state == EmergencyState.UNRESOLVED){
                 emergency.happen();
@@ -51,14 +59,14 @@ public class EmergencyHandler {
         boolean sparePartsAvailable=false;
         for (Agent agent: allAgents){
             if (agent.canRespond(emergency) && agent.isAvailable()&& agent.isHuman()){
-                agent.setLocation(emergency.location);
+                dispatchAgent(emergency.location,agent);
                 humanAgentAvailable=true;
                 break;
             }
         }
         for (Agent agent: allAgents){
             if (agent.canRespond(emergency) && agent.isAvailable()&& agent.isRobot()){
-                agent.setLocation(emergency.location);
+                dispatchAgent(emergency.location,agent);
                 robotAgentAvailable=true;
                 break;
             }
@@ -95,7 +103,7 @@ public class EmergencyHandler {
         boolean agentAvailable = false;
         for (Agent agent: allAgents){
             if (agent.canRespond(emergency) && agent.isAvailable()){
-                agent.setLocation(emergency.location);
+                dispatchAgent(emergency.location,agent);
                 agentAvailable=true;
                 break;
             }
@@ -116,7 +124,7 @@ public class EmergencyHandler {
         boolean sparePartsAvailable = false;
         for (Agent agent: allAgents){
             if (agent.canRespond(emergency) && agent.isAvailable()){
-                agent.setLocation(emergency.location);
+                dispatchAgent(emergency.location,agent);
                 agentAvailable=true;
                 break;
             }
@@ -149,7 +157,7 @@ public class EmergencyHandler {
         boolean suppliesAvaliable = false;
         for (Agent agent: allAgents){
             if (agent.canRespond(emergency) && agent.isAvailable()){
-                agent.setLocation(emergency.location);
+                dispatchAgent(emergency.location,agent);
                 agentAvailable=true;
                 break;
             }
@@ -175,7 +183,25 @@ public class EmergencyHandler {
             return false;
         }
     }
+    private void dispatchAgent(String targetLocation, Agent agent){
+        Facility destinationFacility = getFacilityByLocation(targetLocation);
+        String agentLocation = agent.getLocation();
+        if ( agentLocation != MarsColony.martianSurface){
+          Facility agentFacility = getFacilityByLocation(agentLocation);
+          agentFacility.removeAgentByID(agent.getId());
 
+        }
+        destinationFacility.addAgent(agent);
+
+    }
+    private Facility getFacilityByLocation(String location ){
+        for (Facility facilty : this.facilities){
+            if (facilty.facilityName == location){
+                return facilty;
+            }
+        }
+        return null;
+    }
 }
 
 

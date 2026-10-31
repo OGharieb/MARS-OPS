@@ -81,7 +81,9 @@ public abstract  class Facility {
         }
     }
 
-    
+    public void removeAgentByID(String ID){
+        agents.removeIf(obj -> obj.getId() == ID);
+    }
     
 
     
