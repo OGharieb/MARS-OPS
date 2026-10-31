@@ -17,6 +17,10 @@ public class EmergencyHandler {
         for (Emergency emergency: colony.emergencies){
             if (emergency.state == EmergencyState.UNRESOLVED){
                 emergency.happen();
+                if (emergency.type == EmergencyType.OXYGEN_LEAK){
+                    OxygenLeak oxygenLeak = (OxygenLeak) emergency;
+                    handleOxygenLeak(colony,oxygenLeak,allAgents);
+                }
 
 
 
