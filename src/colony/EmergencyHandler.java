@@ -20,6 +20,10 @@ public class EmergencyHandler {
                     OxygenLeak oxygenLeak = (OxygenLeak) emergency;
                     handleOxygenLeak(colony,oxygenLeak,allAgents);
                 }
+                if (emergency.type == EmergencyType.FIRE){
+                    Fire fire = (Fire) emergency;
+                    handleFire(colony,fire,allAgents);
+                }
 
                 return true;
             }
@@ -82,7 +86,16 @@ public class EmergencyHandler {
                 break;
             }
         }
-        
+        if (agentAvailable){
+            emergency.resolveEmergency();
+            emergency.affectedLaboratory.setOperational(true);
+            return true;
+        }
+        else{
+            System.out.println("agent unavailable");
+            return false;
+        }
+
     }
 
 }
