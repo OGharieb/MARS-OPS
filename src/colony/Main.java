@@ -85,14 +85,14 @@ public class Main {
         System.out.println("Emergency state: " + breakdown.state + ", mission state: " + m4.getState()
                 + ", rover available again: " + rover1.isAvailable());
  
-        // Scenario 6: Environmental Effect (Dust Storm)
+  
         System.out.println("\nSCENARIO 6: Environmental Effect (Dust Storm):");
         ExplorationMission m5 = new ExplorationMission("Olympus Mons", SkillType.EXPLORATION);
-        colony.submitMission(m5);                        // accepted: weather is normal
-        colony.setEnvironment(EnvironmentCondition.DUST_STORM);   // fails the active exploration mission
+        colony.submitMission(m5);                       
+        colony.setEnvironment(EnvironmentCondition.DUST_STORM);   
         System.out.println("Active mission state: " + m5.getState());
         ExplorationMission m6 = new ExplorationMission("Hellas Basin", SkillType.EXPLORATION);
-        colony.submitMission(m6);                        // refused during the storm
+        colony.submitMission(m6);                        
         System.out.println("New mission state: " + m6.getState());
     }
 }
