@@ -1,5 +1,6 @@
 package emergencies;
 import agents.CrewMember;
+import colony.MarsColony;
 public class  MedicalEmergency extends Emergency {
     public final CrewMember agent;
     private boolean hasStarted = false;
@@ -10,7 +11,7 @@ public class  MedicalEmergency extends Emergency {
     }
  
     @Override
-    public void happen() {
+    public void happen(MarsColony colony) {
         if (hasStarted) {
             return;
         }

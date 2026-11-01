@@ -2,7 +2,6 @@
 package missions;
  
 import agents.Agent;
-import agents.ExplorationRover;
 import colony.MarsColony;
 import enums.AgentRole;
 import enums.EquipmentType;

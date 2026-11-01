@@ -1,4 +1,7 @@
 package emergencies;
+import agents.Agent;
+import agents.CrewMember;
+import colony.MarsColony;
 import enums.EmergencyType;
 import facilities.Laboratory;
  
@@ -15,7 +18,7 @@ public class Fire extends Emergency {
     }
  
     @Override 
-    public void happen() {
+    public void happen(MarsColony colony) {
         if (hasStarted) {
             return;
         }
@@ -24,7 +27,11 @@ public class Fire extends Emergency {
         affectedLaboratory.damageAllEquipments();
         affectedLaboratory.looseOxygen(5);
         affectedLaboratory.setOperational(false);
- 
+        for (Agent agent : affectedLaboratory.getAgents()) {
+            if (agent.isHuman()) {
+                colony.addEmergency(new MedicalEmergency((CrewMember) agent));
+            }
+        }
     }
     
 }

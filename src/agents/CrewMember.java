@@ -12,6 +12,7 @@ public abstract  class CrewMember implements Agent {
     protected List<SkillType> skills;
     protected int healthStatus;
     protected boolean incapacitated=false;
+    protected int fatigue;
     AgentRole role;
  
     public CrewMember(String id,String location,String name,AgentRole role,List<SkillType> skills){
@@ -22,6 +23,17 @@ public abstract  class CrewMember implements Agent {
         this.healthStatus=100;
         this.role= role;
         this.skills=skills;
+        this.fatigue=0;
+    }
+
+    public void setFatigue(int fatigue) {
+        this.fatigue = Math.max(0, Math.min(100, fatigue));
+    }
+
+    
+
+    public int getFatigue() {
+        return fatigue;
     }
     
     @Override 

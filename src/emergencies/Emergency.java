@@ -7,20 +7,25 @@ public abstract class Emergency {
     public EmergencyType type;
     public EmergencyState state;
     public String location;
+    public boolean attempted; 
+    public String failureReason="";
     Emergency(EmergencyType type){
         this.type = type;
         this.state = EmergencyState.UNRESOLVED;
+        this.attempted=false;
     }
-    void setLocation(String location){
+
+    
+    public void setLocation(String location){
         this.location = location;
     }
-    void setLocationToMartianSurface() {
+    public void setLocationToMartianSurface() {
         this.location = MarsColony.martianSurface;
     }
      public void resolveEmergency(){
         this.state = EmergencyState.RESOLVED;
      }
-    abstract public void happen();
+    abstract public void happen(MarsColony colony);
 
 
     public EmergencyType getType() {

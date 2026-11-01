@@ -32,12 +32,16 @@ public class MarsColony {
         System.out.println("Environment changed to: " + environment);
         if(environment == EnvironmentCondition.DUST_STORM){
             for(Mission m : missions){
-                if((m.getState() == MissionState.ASSIGNED || m.getState() == MissionState.IN_PROGRESS)
-                        && m.getMissionType() == MissionType.EXPLORATION){
-                    m.setState(MissionState.FAILED);
-                    System.out.println("Active Exploration Mission failed due to dust storm.");
+                if((m.getState() == MissionState.ASSIGNED || m.getState() == MissionState.IN_PROGRESS)){
+                    for (Agent agent : m.getAgents()) {
+                        if (agent.getRole() == enums.AgentRole.EXPLORATION_ROVER) {
+                            m.setFailureReason("rover operations suspended during dust storm");
+                            m.setState(MissionState.FAILED);
+                            break;
+                         }
+                    }
                 }
-            }
+             }   
         }
     }
  
@@ -63,35 +67,19 @@ public class MarsColony {
         }
         return total;
     }
+
+
     
     public boolean consume(ResourceType type, int amount) {
-        return consumeFrom(type, amount, false);
-    }
- 
- 
-    public int getTotalIncludingOffline(ResourceType type) {
-        int total = 0;
-        for (Facility facility : this.facilities) {
-            total += facility.getResources().getAmount(type);
-        }
-        return total;
-    }
- 
-    public boolean consumeIncludingOffline(ResourceType type, int amount) {
-        return consumeFrom(type, amount, true);
-    }
- 
-    private boolean consumeFrom(ResourceType type, int amount, boolean includeOffline) {
-        int total = includeOffline ? getTotalIncludingOffline(type) : getTotal(type);
-        if (total < amount) {
+        if (getTotal(type) < amount) {
             return false;
         }
- 
+        
         int remaining = amount;
         for (Facility facility : facilities) {
-            if ((includeOffline || facility.isOperational()) && remaining > 0) {
+            if (facility.isOperational() && remaining > 0) { 
                 int available = facility.getResources().getAmount(type);
- 
+                
                 if (available >= remaining) {
                     facility.getResources().consumeAmount(type, remaining);
                     remaining = 0;
@@ -104,6 +92,11 @@ public class MarsColony {
         return true;
     }
  
+ 
+    
+ 
+    
+ 
     public List<Equipment> getAllEquipment(){
         List<Equipment> totalEquipment= new ArrayList<>(); 
         
@@ -114,6 +107,7 @@ public class MarsColony {
         }
         return totalEquipment;
     }
+
     public List<Agent> getAllAgents(){
         List<Agent> totalAgents= new ArrayList<>(); 
         
@@ -126,13 +120,7 @@ public class MarsColony {
     }
  
 
-    public List<Agent> getAllAgentsIncludingOffline(){
-        List<Agent> totalAgents= new ArrayList<>();
-        for(Facility facility : facilities){
-            totalAgents.addAll(facility.getAgents());
-        }
-        return totalAgents;
-    }
+    
  
     public boolean hasOperationalLab(){
         for(Facility facility : facilities){
@@ -145,6 +133,16 @@ public class MarsColony {
  
     public void submitMission(Mission mission){
         missions.add(mission);
+
+        for (Mission m : missions) {
+            if ((m.getState() == MissionState.ASSIGNED || m.getState() == MissionState.IN_PROGRESS) && m != mission) {
+                mission.setState(MissionState.FAILED);
+                System.out.println("Mission rejected: Another mission is already active.");
+                return;
+            }
+        }
+
+
         if(environment == EnvironmentCondition.DUST_STORM && mission.getMissionType() == MissionType.EXPLORATION){
             mission.setState(MissionState.FAILED);
             System.out.println("Mission rejected: exploration missions are suspended during a dust storm.");

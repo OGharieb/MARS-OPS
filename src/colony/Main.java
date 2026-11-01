@@ -13,6 +13,7 @@ import enums.SkillType;
 import equipments.Equipment;
 import facilities.Habitat;
 import facilities.Laboratory;
+import facilities.StorageFacility;
 import java.util.Arrays;
 import missions.ExplorationMission;
  
@@ -22,7 +23,9 @@ public class Main {
  
         Habitat habA = new Habitat("Habitat A");
         Laboratory lab1 = new Laboratory("Lab 1");
+        StorageFacility storage = new StorageFacility("Main Storage");
  
+        storage.getResources().addAmount(ResourceType.SPARE_PARTS, 5);
         habA.getResources().addAmount(ResourceType.OXYGEN, 100);
         habA.getResources().addAmount(ResourceType.BATTERY, 30);
         habA.getResources().addAmount(ResourceType.SPARE_PARTS, 5);
@@ -40,6 +43,7 @@ public class Main {
         habA.addAgent(rover1);
         habA.addAgent(bot1);
  
+        colony.addFacility(storage);
         colony.addFacility(habA);
         colony.addFacility(lab1);
  

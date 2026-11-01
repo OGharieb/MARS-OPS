@@ -15,7 +15,7 @@ public class RoverBreakdown extends Emergency {
     }
  
     @Override
-    public void happen() {
+    public void happen(MarsColony colony) {
         if (hasStarted) {
             return;
         }

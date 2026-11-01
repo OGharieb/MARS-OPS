@@ -1,4 +1,5 @@
 package emergencies;
+import colony.MarsColony;
 import enums.EmergencyType;
 import facilities.Habitat;
 public class OxygenLeak extends Emergency {
@@ -13,15 +14,13 @@ public class OxygenLeak extends Emergency {
 
 
     @Override
-    public void happen() {
+    public void happen(MarsColony colony) {
         if (!hasLeaked) {
         hasLeaked = true;
         
         System.out.println("Oxygen is leaking at " + location + "!!!!");
         affectedHabitat.setOperational(false);
-    }
-}
-
-
-    
+        affectedHabitat.looseOxygen(oxygenLeakAmount);
+        }
+    } 
 }

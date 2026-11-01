@@ -21,6 +21,7 @@ public abstract class Mission {
    protected MissionState state;
    protected List<Agent> assignedAgents;
    protected List<Equipment> assignedEquipment;
+   protected String failureReason="" ;
  
     public Mission(String location,SkillType requiredSkill,int duration,MissionType missionType) {
         this.location=location;
@@ -46,8 +47,18 @@ public abstract class Mission {
         agent.setAvailable(false);
         if(agent.getRole()==AgentRole.EXPLORATION_ROVER){
             ((ExplorationRover) agent).assignExplorationMission(this);
+            agent.setLocationToMartianSurface();
         }
     }
+
+    public void setFailureReason(String failureReason) {
+        this.failureReason = failureReason;
+    }
+
+    public String getFailureReason() {
+        return failureReason;
+    }
+    
     
     public List<Agent> getAgents(){
     return this.assignedAgents;
@@ -97,6 +108,22 @@ public abstract class Mission {
             return;
         }
         this.elapsedTime++;
+
+        for (Agent agent : assignedAgents) {
+            if (agent.isHuman()) {
+                agents.CrewMember crew = (agents.CrewMember) agent;
+                crew.setFatigue(crew.getFatigue() + 10);
+            } else if (agent.isRobot()) {
+                agents.RoboticUnit robot = (agents.RoboticUnit) agent;
+                robot.drainBattery(10);
+                if (robot.getBatteryLevel() <= 0) {
+                    this.setFailureReason("insufficient battery");
+                    this.setState(MissionState.FAILED);
+                    return;
+                }
+            }
+        }
+
         if(this.elapsedTime>=this.duration){
             this.setState(MissionState.COMPLETED);
             System.out.println("Mission at " + location + " completed.");
