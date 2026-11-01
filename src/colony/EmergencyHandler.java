@@ -1,5 +1,5 @@
 package colony;
-
+ 
 import agents.Agent;
 import emergencies.Emergency;
 import emergencies.Fire;
@@ -10,46 +10,48 @@ import enums.EmergencyState;
 import enums.EmergencyType;
 import enums.MissionState;
 import enums.ResourceType;
-import java.util.List;
 import facilities.Facility;
-
+import java.util.List;
+import missions.Mission;
+ 
 public class EmergencyHandler {
     private List<Facility> facilities;
 
-
     public boolean handleEmergencies(MarsColony colony){
-        List<Agent> allAgents = colony.getAllAgents();
         this.facilities = colony.getFacilities();
-
+        boolean handledAny = false;
+ 
         for (Emergency emergency: colony.emergencies){
-            if (emergency.state == EmergencyState.UNRESOLVED){
-                emergency.happen();
-                if (emergency.type == EmergencyType.OXYGEN_LEAK){
-                    OxygenLeak oxygenLeak = (OxygenLeak) emergency;
-                    handleOxygenLeak(colony,oxygenLeak,allAgents);
-                }
-                else if (emergency.type == EmergencyType.FIRE){
-                    Fire fire = (Fire) emergency;
-                    handleFire(colony,fire,allAgents);
-                }
-                else if (emergency.type == EmergencyType.ROVER_BREAKDOWN){
-                    RoverBreakdown roverBreakdown = (RoverBreakdown) emergency;
-                    roverBreakdown.rover.assignedMission.setState(MissionState.FAILED);
-                    handleRoverBreakdown(colony,roverBreakdown,allAgents);
-                }
-                else if (emergency.type == EmergencyType.MEDICAL_EMERGENCY){
-                    MedicalEmergency medicalEmergency = (MedicalEmergency) emergency;
-                    handleMedicalEmergency(colony,medicalEmergency,allAgents);
-                }
-                
-
-
-                return true;
+            if (emergency.state != EmergencyState.UNRESOLVED){
+                continue;
             }
+            List<Agent> allAgents = colony.getAllAgentsIncludingOffline();
+            emergency.happen();
+            if (emergency.type == EmergencyType.OXYGEN_LEAK){
+                OxygenLeak oxygenLeak = (OxygenLeak) emergency;
+                handleOxygenLeak(colony,oxygenLeak,allAgents);
+            }
+            else if (emergency.type == EmergencyType.FIRE){
+                Fire fire = (Fire) emergency;
+                handleFire(colony,fire,allAgents);
+            }
+            else if (emergency.type == EmergencyType.ROVER_BREAKDOWN){
+                RoverBreakdown roverBreakdown = (RoverBreakdown) emergency;
+                Mission mission = roverBreakdown.rover.assignedMission;
+                if (mission != null){
+                    mission.setState(MissionState.FAILED);
+                }
+                handleRoverBreakdown(colony,roverBreakdown,allAgents);
+            }
+            else if (emergency.type == EmergencyType.MEDICAL_EMERGENCY){
+                MedicalEmergency medicalEmergency = (MedicalEmergency) emergency;
+                handleMedicalEmergency(colony,medicalEmergency,allAgents);
+            }
+            handledAny = true;
         }
-        return false;
+        return handledAny;
     }
-
+ 
     private boolean handleOxygenLeak(MarsColony colony,OxygenLeak emergency,List<Agent> allAgents){
         boolean humanAgentAvailable=false;
         boolean robotAgentAvailable=false;
@@ -68,7 +70,7 @@ public class EmergencyHandler {
                 break;
             }
         }
-        if (colony.getTotal(enums.ResourceType.SPARE_PARTS)>0){
+        if (colony.getTotalIncludingOffline(ResourceType.SPARE_PARTS)>0){
             sparePartsAvailable=true;
         }
         if (!humanAgentAvailable){
@@ -81,9 +83,9 @@ public class EmergencyHandler {
             System.out.println("No spare parts available to resolve the emergency.");
         }
         if (humanAgentAvailable && robotAgentAvailable && sparePartsAvailable){
-            colony.consume(ResourceType.SPARE_PARTS,1);
+            colony.consumeIncludingOffline(ResourceType.SPARE_PARTS,1);
             emergency.affectedHabitat.looseOxygen(emergency.oxygenLeakAmount);
-
+ 
             emergency.resolveEmergency();
             emergency.affectedHabitat.setOperational(true);
             return true;
@@ -93,9 +95,9 @@ public class EmergencyHandler {
             emergency.affectedHabitat.looseOxygen(2*(emergency.oxygenLeakAmount));
             return false;
         }
-
+ 
     }
-
+ 
     private boolean handleFire(MarsColony colony, Fire emergency,List<Agent> allAgents){
         boolean agentAvailable = false;
         for (Agent agent: allAgents){
@@ -114,7 +116,7 @@ public class EmergencyHandler {
             System.out.println("agent unavailable");
             return false;
         }
-
+ 
     }
     private boolean handleRoverBreakdown(MarsColony colony, RoverBreakdown emergency,List<Agent> allAgents){
         boolean agentAvailable = false;
@@ -126,7 +128,7 @@ public class EmergencyHandler {
                 break;
             }
         }
-        if (colony.getTotal(enums.ResourceType.SPARE_PARTS)>0){
+        if (colony.getTotalIncludingOffline(ResourceType.SPARE_PARTS)>0){
             sparePartsAvailable=true;
         }
         
@@ -138,17 +140,18 @@ public class EmergencyHandler {
         }
         if (agentAvailable&&sparePartsAvailable){
             emergency.resolveEmergency();
-            emergency.rover.setAvailable(true);
-            colony.consume(ResourceType.SPARE_PARTS,1);
-
+    
+            emergency.rover.repair();
+            colony.consumeIncludingOffline(ResourceType.SPARE_PARTS,1);
+ 
             return true;
         }
         else{
             return false;
         }
-
+ 
     }
-
+ 
     private boolean handleMedicalEmergency(MarsColony colony, MedicalEmergency emergency,List<Agent> allAgents){
         boolean agentAvailable = false;
         boolean suppliesAvaliable = false;
@@ -159,7 +162,7 @@ public class EmergencyHandler {
                 break;
             }
         }
-        if (colony.getTotal(enums.ResourceType.MEDICAL_SUPPLIES)>0){
+        if (colony.getTotalIncludingOffline(ResourceType.MEDICAL_SUPPLIES)>0){
             suppliesAvaliable=true;
         }
         
@@ -171,34 +174,39 @@ public class EmergencyHandler {
         }
         if (agentAvailable&&suppliesAvaliable){
             emergency.resolveEmergency();
-            emergency.agent.setAvailable(true);
-            colony.consume(ResourceType.MEDICAL_SUPPLIES,1);
-
+            emergency.agent.setIncapacitated(false);
+            colony.consumeIncludingOffline(ResourceType.MEDICAL_SUPPLIES,1);
+ 
             return true;
         }
         else{
             return false;
         }
     }
+
     private void dispatchAgent(String targetLocation, Agent agent){
         Facility destinationFacility = getFacilityByLocation(targetLocation);
-        String agentLocation = agent.getLocation();
-        if ( agentLocation != MarsColony.martianSurface){
-          Facility agentFacility = getFacilityByLocation(agentLocation);
-          agentFacility.removeAgentByID(agent.getId());
-
+        if (destinationFacility == null){
+            System.out.println(agent.getId() + " dispatched to " + targetLocation);
+            return;
+        }
+        Facility agentFacility = getFacilityByLocation(agent.getLocation());
+        if (agentFacility != null){
+            agentFacility.removeAgentByID(agent.getId());
         }
         destinationFacility.addAgent(agent);
-
     }
-    private Facility getFacilityByLocation(String location ){
+ 
+
+    private Facility getFacilityByLocation(String location){
+        if (location == null){
+            return null;
+        }
         for (Facility facilty : this.facilities){
-            if (facilty.facilityName == location){
+            if (facilty.facilityName.equals(location)){
                 return facilty;
             }
         }
         return null;
     }
 }
-
-

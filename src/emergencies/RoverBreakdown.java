@@ -1,21 +1,27 @@
 package emergencies;
-import enums.EmergencyType;
 import agents.ExplorationRover;
+import colony.MarsColony;
+import enums.EmergencyType;
 public class RoverBreakdown extends Emergency {
-
+ 
     public ExplorationRover  rover;
-
-    RoverBreakdown(ExplorationRover rover) {
+ 
+    private boolean hasStarted = false;
+ 
+    public RoverBreakdown(ExplorationRover rover) {
         super(EmergencyType.ROVER_BREAKDOWN);
         this.rover = rover;
-        this.setLocationToMartianSurface();
+        this.location = MarsColony.martianSurface;
     }
-
+ 
     @Override
     public void happen() {
-
+        if (hasStarted) {
+            return;
+        }
+        hasStarted = true;
         System.out.println("Rover has broken down on the Martian surface!");
-        rover.setAvailable(false);
+        rover.setFunctional(false);
     }
     
 }

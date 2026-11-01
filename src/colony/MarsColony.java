@@ -1,5 +1,5 @@
 package colony;
-
+ 
 import agents.Agent;
 import emergencies.Emergency;
 import enums.EnvironmentCondition;
@@ -12,21 +12,21 @@ import facilities.Facility;
 import java.util.ArrayList;
 import java.util.List;
 import missions.Mission;
-
+ 
 public class MarsColony {
     List<Facility> facilities = new ArrayList<>();
     private int currentDay;
     List<Mission> missions= new ArrayList<>();
     public static String martianSurface = "Martian Surface";
-    private EmergencyHandler emergencyHandler = new EmergencyHandler();
+    private final EmergencyHandler emergencyHandler = new EmergencyHandler();
     public List<Emergency> emergencies = new ArrayList<>();
     private EnvironmentCondition environment = EnvironmentCondition.NORMAL;
-
+ 
     public MarsColony(){
         this.facilities= new ArrayList<>();
         this.currentDay=1;
     }
-
+ 
     public void setEnvironment(EnvironmentCondition environment){
         this.environment = environment;
         System.out.println("Environment changed to: " + environment);
@@ -40,20 +40,20 @@ public class MarsColony {
             }
         }
     }
-
+ 
     public EnvironmentCondition getEnvironment() {
         return environment;
     }
-
+ 
     
-
+ 
     public List<Facility> getFacilities() {
         return facilities;
     }
     public void addFacility(Facility facility){
         facilities.add(facility);
     }
-
+ 
     public int getTotal(ResourceType type) {
         int total = 0;
         for (Facility facility : this.facilities) {
@@ -65,15 +65,33 @@ public class MarsColony {
     }
     
     public boolean consume(ResourceType type, int amount) {
-        if (getTotal(type) < amount) {
+        return consumeFrom(type, amount, false);
+    }
+ 
+ 
+    public int getTotalIncludingOffline(ResourceType type) {
+        int total = 0;
+        for (Facility facility : this.facilities) {
+            total += facility.getResources().getAmount(type);
+        }
+        return total;
+    }
+ 
+    public boolean consumeIncludingOffline(ResourceType type, int amount) {
+        return consumeFrom(type, amount, true);
+    }
+ 
+    private boolean consumeFrom(ResourceType type, int amount, boolean includeOffline) {
+        int total = includeOffline ? getTotalIncludingOffline(type) : getTotal(type);
+        if (total < amount) {
             return false;
         }
-        
+ 
         int remaining = amount;
         for (Facility facility : facilities) {
-            if (facility.isOperational() && remaining > 0) { 
+            if ((includeOffline || facility.isOperational()) && remaining > 0) {
                 int available = facility.getResources().getAmount(type);
-                
+ 
                 if (available >= remaining) {
                     facility.getResources().consumeAmount(type, remaining);
                     remaining = 0;
@@ -85,7 +103,7 @@ public class MarsColony {
         }
         return true;
     }
-
+ 
     public List<Equipment> getAllEquipment(){
         List<Equipment> totalEquipment= new ArrayList<>(); 
         
@@ -106,7 +124,16 @@ public class MarsColony {
         }
         return totalAgents;
     }
+ 
 
+    public List<Agent> getAllAgentsIncludingOffline(){
+        List<Agent> totalAgents= new ArrayList<>();
+        for(Facility facility : facilities){
+            totalAgents.addAll(facility.getAgents());
+        }
+        return totalAgents;
+    }
+ 
     public boolean hasOperationalLab(){
         for(Facility facility : facilities){
             if(facility.getType().equals(FacilityType.LABORATORY)&&facility.isOperational()){
@@ -115,35 +142,40 @@ public class MarsColony {
         }
         return false;
     }
-
+ 
     public void submitMission(Mission mission){
-        if(!mission.hasRequiredEquipment(this)||!mission.hasSufficientRecourses(this)){
+        missions.add(mission);
+        if(environment == EnvironmentCondition.DUST_STORM && mission.getMissionType() == MissionType.EXPLORATION){
             mission.setState(MissionState.FAILED);
-            missions.add(mission);
-            System.out.println("mission failed couldn't assemble team ");
-
+            System.out.println("Mission rejected: exploration missions are suspended during a dust storm.");
             return;
         }
-        List<Agent> allAgents= getAllAgents();
-        if(mission.assembleTeam(allAgents)){
+        if(!mission.hasRequiredEquipment(this)){
+            mission.setState(MissionState.FAILED);
+            System.out.println("Mission rejected: required equipment is not available.");
+            return;
+        }
+        if(!mission.hasSufficientRecourses(this)){
+            mission.setState(MissionState.FAILED);
+            System.out.println("Mission rejected: insufficient resources.");
+            return;
+        }
+        if(mission.assembleTeam(getAllAgents())){
             mission.consumeResources(this);
             mission.assignEquipment(this);
             mission.setState(MissionState.ASSIGNED);
-            missions.add(mission);
-            System.out.println("mission assigned team has been assembled ");
-
+            System.out.println("Mission assigned: team has been assembled.");
         }
         else{
             mission.setState(MissionState.FAILED);
-            System.out.println("mission failed couldn't assemble team ");
-            missions.add(mission);
+            System.out.println("Mission rejected: no suitable team could be assembled.");
         }
     }
     public void addEmergency(Emergency emergency){
         emergencies.add(emergency);
     }
     
-
+ 
     public void advanceDay() {
         this.currentDay++;
         for(Mission mission: missions){
@@ -153,11 +185,11 @@ public class MarsColony {
         emergencyHandler.handleEmergencies(this);
         
     }
-
+ 
     public int getCurrentDay() {
         return currentDay;
     }
-
+ 
     public void printStatusReport(){
         System.out.println("=== Colony Status Report (Day " + currentDay + ") ===");
         System.out.println("Environment: " + environment);
@@ -166,10 +198,6 @@ public class MarsColony {
         }
         System.out.println("==========================================");
     }
-
-
+ 
+ 
     }
-
-    
-    
-

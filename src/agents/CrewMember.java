@@ -1,9 +1,9 @@
 package agents;
-
+ 
 import enums.AgentRole;
 import enums.SkillType;
 import java.util.List;
-
+ 
 public abstract  class CrewMember implements Agent {
     protected String id;
     protected String name;
@@ -11,8 +11,9 @@ public abstract  class CrewMember implements Agent {
     protected boolean available;
     protected List<SkillType> skills;
     protected int healthStatus;
+    protected boolean incapacitated=false;
     AgentRole role;
-
+ 
     public CrewMember(String id,String location,String name,AgentRole role,List<SkillType> skills){
         this.id=id;
         this.name=name;
@@ -27,7 +28,7 @@ public abstract  class CrewMember implements Agent {
     public AgentRole getRole() {
         return role;
     }
-
+ 
     @Override 
     public String getId(){
         return this.id;
@@ -42,7 +43,7 @@ public abstract  class CrewMember implements Agent {
     }
     @Override 
     public boolean isAvailable(){
-        return this.available&&this.healthStatus>0;
+        return this.available&&this.healthStatus>0&&!this.incapacitated;
     }
     @Override 
     public void setAvailable(boolean available){
@@ -56,6 +57,12 @@ public abstract  class CrewMember implements Agent {
     public boolean isHuman(){
         return true;
     }
+    public void setIncapacitated(boolean incapacitated){
+        this.incapacitated=incapacitated;
+    }
+    public boolean isIncapacitated(){
+        return this.incapacitated;
+    }
     public String getName(){
         return this.name;
     }
@@ -67,8 +74,8 @@ public abstract  class CrewMember implements Agent {
     }
     
  
-
-
-
+ 
+ 
+ 
     
 }

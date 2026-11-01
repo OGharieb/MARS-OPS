@@ -1,13 +1,17 @@
-package missions;
 
+package missions;
+ 
 import agents.Agent;
+import agents.ExplorationRover;
 import colony.MarsColony;
+import enums.AgentRole;
 import enums.MissionState;
 import enums.MissionType;
 import enums.SkillType;
+import equipments.Equipment;
 import java.util.ArrayList;
 import java.util.List;
-
+ 
 public abstract class Mission {
    protected String location;
    protected SkillType requiredSkill;
@@ -16,7 +20,8 @@ public abstract class Mission {
    protected int duration;
    protected MissionState state;
    protected List<Agent> assignedAgents;
-
+   protected List<Equipment> assignedEquipment;
+ 
     public Mission(String location,SkillType requiredSkill,int duration,MissionType missionType) {
         this.location=location;
         this.requiredSkill=requiredSkill;
@@ -24,45 +29,77 @@ public abstract class Mission {
         this.elapsedTime=0;
         this.state= MissionState.PENDING;
         this.assignedAgents = new ArrayList<>();
+        this.assignedEquipment = new ArrayList<>();
         this.missionType=missionType;
     }
-
+ 
     public MissionType getMissionType() {
         return missionType;
     }
-
-
+ 
+    public String getLocation() {
+        return location;
+    }
+ 
     public void assign(Agent agent){
         this.assignedAgents.add(agent);
+        agent.setAvailable(false);
+        if(agent.getRole()==AgentRole.EXPLORATION_ROVER){
+            ((ExplorationRover) agent).assignExplorationMission(this);
+        }
     }
     
     public List<Agent> getAgents(){
     return this.assignedAgents;
    }
     
-
+ 
     public SkillType getRequiredSkill(){
         return this.requiredSkill;
     }
     public MissionState getState(){
         return this.state;
     }
+ 
 
-    public void setState(MissionState state){
-        this.state = state;
-        if(state == MissionState.COMPLETED || state == MissionState.FAILED){
-            for(Agent agent : assignedAgents){
-                agent.setAvailable(true);
-            }
+    public void setState(MissionState newState){
+        if(this.state == MissionState.COMPLETED || this.state == MissionState.FAILED){
+            return;
+        }
+        this.state = newState;
+        if(newState == MissionState.COMPLETED || newState == MissionState.FAILED){
+            releaseTeamAndEquipment();
         }
     }
-
-    public void advanceTime(){
-        if(this.state.equals(MissionState.IN_PROGRESS)){
-            this.elapsedTime++;
+ 
+    private void releaseTeamAndEquipment(){
+        for(Agent agent : assignedAgents){
+            agent.setAvailable(true);
+            if(agent.getRole()==AgentRole.EXPLORATION_ROVER){
+                ExplorationRover rover = (ExplorationRover) agent;
+                if(rover.assignedMission == this){
+                    rover.assignedMission = null;
+                }
+            }
         }
+        for(Equipment eq : assignedEquipment){
+            eq.setAssigned(false);
+        }
+        assignedEquipment.clear();
+    }
+ 
+   
+    public void advanceTime(){
+        if(this.state == MissionState.ASSIGNED){
+            this.state = MissionState.IN_PROGRESS;
+        }
+        if(this.state != MissionState.IN_PROGRESS){
+            return;
+        }
+        this.elapsedTime++;
         if(this.elapsedTime>=this.duration){
             this.setState(MissionState.COMPLETED);
+            System.out.println("Mission at " + location + " completed.");
         }
     }
     public abstract void assignEquipment(MarsColony colony);
@@ -70,9 +107,4 @@ public abstract class Mission {
     public abstract boolean  assembleTeam(List<Agent> availableAgents);
     public abstract boolean hasSufficientRecourses(MarsColony colony);
     public abstract boolean hasRequiredEquipment(MarsColony colony);
-
-
-    
-
-    
 }
